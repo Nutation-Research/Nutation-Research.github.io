@@ -27,10 +27,6 @@ export function About() {
           product, Yuna, reads a program frame by frame and explains a score the way a technical
           panel would.
         </p>
-        <p className="mt-5 text-[16px] leading-relaxed text-muted">
-          Our name comes from nutation — the small wobble in a spinning body's axis, the same
-          physics that governs a gyroscope, a top, and a skater mid-rotation.
-        </p>
         <h2 className="mt-14 font-serif text-[22px] text-ink">What we're working on</h2>
         <p className="mt-4 text-[16px] leading-relaxed text-muted">
           Figure skating is our proving ground — every element is scored in enough detail to
