@@ -22,8 +22,8 @@
   --color-muted: #665f57;
   --color-faint: #9c9187;
 
-  --color-accent: #5c1f30;
-  --color-accent-strong: #401524;
+  --color-accent: #6e1a1a;
+  --color-accent-strong: #4a1010;
 
   /* Yuna's own dark trail-plate background — used only inside the Coach demo canvas, never
      as site chrome. Keep in sync with app/src/artifact/landingTheme.ts's WELL constant. */
@@ -49,7 +49,7 @@ body {
 }
 
 ::selection {
-  background: rgba(92, 31, 48, 0.16);
+  background: rgba(110, 26, 26, 0.16);
 }
 
 a {
