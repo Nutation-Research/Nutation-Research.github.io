@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — Nutation Research's own minimal chrome: near-white paper, ink type, one
+ * burgundy accent (deliberately NOT Yuna's dusty-rose brand — Yuna gets its own page/palette,
+ * ported verbatim in src/coach/*.ts so its demo still reads exactly like the real product).
+ * Register matches the inspo set (si.inc, amilabs, thinkingmachines, pi.website, worldlabs):
+ * lots of whitespace, restrained color, serif display + mono/sans body.
+ */
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Menlo', 'Cascadia Code', monospace;
+
+  --color-paper: #faf8f4;
+  --color-card: #ffffff;
+  --color-soft: #f2efe9;
+  --color-line: #e5e1d8;
+  --color-line-strong: #d6d0c3;
+
+  --color-ink: #1a1714;
+  --color-muted: #665f57;
+  --color-faint: #9c9187;
+
+  --color-accent: #5c1f30;
+  --color-accent-strong: #401524;
+
+  /* Yuna's own dark trail-plate background — used only inside the Coach demo canvas, never
+     as site chrome. Keep in sync with app/src/artifact/landingTheme.ts's WELL constant. */
+  --color-well: #452130;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+::selection {
+  background: rgba(92, 31, 48, 0.16);
+}
+
+a {
+  color: inherit;
+}
+
+/* Brand lockup — mark + research-lab serif wordmark (Newsreader). */
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.brand-lockup-mark {
+  height: 1.9rem;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.wordmark {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--color-ink);
+}
+
+.microlabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.nav-link {
+  font-size: 14px;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-ink);
+}
+
+.pill-link {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 550;
+  background: var(--color-accent);
+  color: var(--color-card);
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+.pill-link:hover {
+  background: var(--color-accent-strong);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(28, 25, 23, 0.14);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
