@@ -92,7 +92,7 @@ export function HomeCoachDemo() {
         )}
       </div>
       {active && (
-        <div className="w-full h-[320px] md:w-[360px] md:h-full shrink-0">
+        <div className="w-full md:w-[360px] md:h-full shrink-0">
           <CoachPanel />
         </div>
       )}
