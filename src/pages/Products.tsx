@@ -6,19 +6,38 @@ export function Products() {
     <div>
       <Nav />
       <main className="max-w-3xl mx-auto px-6 pt-20 pb-24">
-        <span className="microlabel">Products</span>
-        <div className="mt-3 flex items-center gap-3">
-          <img src="/yuna-mark.png" alt="" draggable={false} className="h-10 w-auto" />
-          <h1 className="font-serif text-[36px] leading-tight tracking-[-0.01em] text-ink m-0">Yuna</h1>
-        </div>
-        <p className="mt-2 text-[13px] text-faint">Browser research preview</p>
+        <div className="md:grid md:grid-cols-[1fr_220px] md:gap-10 md:items-start">
+          <div>
+            <span className="microlabel">Products</span>
+            <div className="mt-3 flex items-center gap-3">
+              <img src="/yuna-mark.png" alt="" draggable={false} className="h-10 w-auto" />
+              <h1 className="font-serif text-[36px] leading-tight tracking-[-0.01em] text-ink m-0">Yuna</h1>
+            </div>
+            <p className="mt-2 text-[13px] text-faint">Browser research preview</p>
 
-        <p className="mt-6 text-[16px] leading-relaxed text-muted max-w-xl">
-          Yuna reads a figure skating program frame by frame — pose, jumps, spins, edges — and
-          turns it into the kind of read a technical panel gives: what earned a bullet, what
-          didn't, and why. Point it at a clip and it builds the skeleton, the jump arcs, and the
-          scoring narrative underneath.
-        </p>
+            <p className="mt-6 text-[16px] leading-relaxed text-muted max-w-xl">
+              Yuna reads a figure skating program frame by frame — pose, jumps, spins, edges — and
+              turns it into the kind of read a technical panel gives: what earned a bullet, what
+              didn't, and why. Point it at a clip and it builds the skeleton, the jump arcs, and the
+              scoring narrative underneath.
+            </p>
+          </div>
+          <a
+            href="/#demo"
+            className="group mt-8 md:mt-0 flex flex-col items-center gap-2 shrink-0"
+            aria-label="Try the live Coach demo"
+          >
+            <img
+              src="/spinning_loop.gif"
+              alt="Yuna, animated"
+              draggable={false}
+              className="w-40 md:w-full h-auto opacity-90 group-hover:opacity-100 transition-opacity"
+            />
+            <span className="text-[11px] font-mono uppercase tracking-[0.06em] text-faint group-hover:text-accent transition-colors">
+              Click to try it live →
+            </span>
+          </a>
+        </div>
 
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
