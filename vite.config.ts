@@ -1,21 +1,16 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { resolve } from 'node:path'
-
-const root = import.meta.dirname
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  server: { port: 5199, strictPort: true },
+  preview: { port: 5199, strictPort: true },
   build: {
     outDir: 'docs',
-    rollupOptions: {
-      input: {
-        main: resolve(root, 'index.html'),
-        about: resolve(root, 'about.html'),
-        products: resolve(root, 'products.html'),
-        join: resolve(root, 'join.html'),
-      },
-    },
+    // The prebuilt Yuna viewer under public/viewer already has its own hashed asset
+    // filenames; a large public/runs corpus also lives there. Neither needs bundling,
+    // so keep Vite's default (copy-through) behavior — nothing to override here.
   },
-})
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+  },
+});

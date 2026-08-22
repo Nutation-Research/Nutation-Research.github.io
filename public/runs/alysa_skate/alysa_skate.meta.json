@@ -1,0 +1,16 @@
+{
+  "artifact_version": "0.10.0",
+  "video_id": "alysa_skate",
+  "element_id": "alysa_skate",
+  "produced_at_utc": "2026-06-19T21:48:09.159573+00:00",
+  "fps": 29.97002997002997,
+  "clip_start_sec": 7.12,
+  "n_frames": 8393,
+  "frame_width": 1920,
+  "frame_height": 1080,
+  "models": {
+    "pose": "mediapipe@v1"
+  },
+  "overrides_applied": [],
+  "extractor_errors": {}
+}

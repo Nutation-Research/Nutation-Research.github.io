@@ -1,24 +1,284 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-display="cormorant" data-lead="garamond" data-pill="muted">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light" />
-    <meta name="description" content="Nutation Research builds AI systems that understand human movement, starting with figure skating." />
+    <title>Nutation Research</title>
+    <meta
+      name="description"
+      content="World action models for the hardest movements humans perform."
+    />
+    <link rel="icon" type="image/png" href="/nutation-mark.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..750&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500&family=Chivo:wght@300;400;700&family=Chivo+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Epilogue:wght@300;400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,100;0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Hanken+Grotesk:wght@300;400;500&family=Instrument+Sans:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Jost:wght@200;300;400;500&family=Karla:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+Display:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400..700;1,400..700&family=Source+Serif+4:opsz,wght@8..60,400..700&family=Syne:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <title>Nutation Research</title>
-    <script type="module" crossorigin src="/assets/main-BnRL5_WB.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/main-x9t8wxaC.css">
+    <!-- Critical boot CSS: CSS arrives via the module graph, so without this the mark
+         flashes unstyled and then the page goes blank until JS paints (or forever if
+         WebGL/init throws). -->
+    <style>
+      html {
+        margin: 0;
+        background: #eadcd8;
+      }
+      body {
+        margin: 0;
+        /* The intro owns the viewport; scrolling unlocks once the mark docks. */
+        height: 100svh;
+        overflow: hidden;
+        background: #eadcd8;
+        color: #1c1917;
+        font-family: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+      }
+      #stage { position: fixed; inset: 0; width: 100%; height: 100%; opacity: 0; display: block; }
+      #fx { pointer-events: none; }
+      body.boot-pending #fx-mark,
+      body.boot-pending #fx-mark-bold,
+      body.boot-pending #fx-word,
+      body.boot-pending #fx-eq,
+      /* The story plate lives in the module-graph CSS, so without this its
+         first video frame flashes over the intro on a cold load. */
+      body.boot-pending #story-layer { opacity: 0 !important; }
+      body.boot-pending #site-header,
+      body.boot-pending #content { opacity: 0; }
+      body.boot-failed #site-header,
+      body.boot-failed #content {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: none !important;
+      }
+      body.boot-failed #header-mark { opacity: 1 !important; }
+      body.boot-failed #header-lockup .wordmark { opacity: 1 !important; transform: translateY(1px) !important; }
+    </style>
+    <script type="module" crossorigin src="/assets/index-CF-48bh6.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C05nBrUM.css">
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="boot-pending intro-running">
+    <div id="boot-hint" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none;font-family:EB Garamond,Georgia,serif;font-size:18px;letter-spacing:-0.01em;color:#6d5558;">
+      Nutation Research
+    </div>
+    <button id="skip-intro" type="button">Skip</button>
+    <canvas id="stage"></canvas>
+
+    <!-- intro fx layer: the mark stamps over the traced path, then docks to the header -->
+    <div id="fx" aria-hidden="true">
+      <img id="fx-mark" src="/nutation-mark.png" alt="" draggable="false" style="opacity:0" />
+      <img id="fx-mark-bold" src="/nutation-mark.png" alt="" draggable="false" style="opacity:0" />
+      <span id="fx-word" class="wordmark" style="opacity:0">Nutation Research</span>
+      <div id="fx-eq" class="fx-eq" style="opacity:0"></div>
+    </div>
+
+    <header id="site-header">
+      <span class="brand-lockup" id="header-lockup" aria-label="Nutation Research">
+        <img id="header-mark" src="/nutation-mark.png" alt="" draggable="false" class="brand-lockup-mark" />
+        <span class="wordmark">Nutation Research</span>
+      </span>
+      <nav>
+        <details class="contact" data-contact>
+          <summary>Contact</summary>
+          <div class="contact-panel">
+            <a class="contact-addr" href="mailto:shiva271@mit.edu">shiva271@mit.edu</a>
+            <p class="contact-note">
+              <button type="button" class="contact-act" data-copy>copy</button>
+              <span>or</span>
+              <a class="contact-act" href="mailto:shiva271@mit.edu">click to email</a>
+            </p>
+          </div>
+        </details>
+        <a href="#yuna">Yuna</a>
+      </nav>
+    </header>
+
+    <div id="story-layer" aria-hidden="true">
+      <div
+        id="story-stage"
+        data-frame="hud"
+        data-beat="watercolor"
+        data-hud="on"
+        data-mark="on"
+        data-caption="on"
+        data-shadow="plate"
+      >
+        <div class="story-frame">
+          <div class="story-chrome">
+            <span class="story-dot story-dot-r"></span>
+            <span class="story-dot story-dot-y"></span>
+            <span class="story-dot story-dot-g"></span>
+            <span class="story-viewer-tag">VIEWER</span>
+            <span id="story-caption">alysa_fall · watercolor · the fall</span>
+            <span id="story-tc" class="story-tc">00:00:00:00</span>
+          </div>
+          <div class="story-well">
+            <video id="story-watercolor" src="/story/watercolor.mp4" muted playsinline preload="auto"></video>
+            <video id="story-futures" src="/story/futures.mp4" muted playsinline preload="auto"></video>
+            <video id="story-duet" src="/story/duet.mp4" muted playsinline loop preload="auto"></video>
+            <div class="story-hud" aria-hidden="true">
+              <i class="hud-c hud-tl"></i>
+              <i class="hud-c hud-tr"></i>
+              <i class="hud-c hud-bl"></i>
+              <i class="hud-c hud-br"></i>
+              <img class="hud-mark" src="/nutation-mark.png" alt="" draggable="false" />
+            </div>
+          </div>
+        </div>
+        <div class="story-plate-cap">
+          <span id="story-plate-text">2022 US Nationals Short Program: Alysa Liu Triple Axel</span>
+        </div>
+      </div>
+    </div>
+
+    <main id="content">
+      <section id="hero">
+        <div class="hero-copy">
+          <h1>
+            World action models<br />
+            for the hardest movements humans perform
+          </h1>
+          <p id="hero-lead">
+            Nutation Research is bringing classical mechanics rigor and coaching
+            verifiability to human action-motion generation. We begin with elite sports, 
+            where the sensitive biomechanics are out-of-distribution for existing diffusion transformer models.
+          </p>
+          <p class="hero-links">
+            <a class="pill" href="#yuna">Meet Yuna</a>
+          </p>
+        </div>
+        <div class="hero-caption">
+          <span id="regime-chip">loops &mdash; released with a backward flick</span>
+          <span id="hero-hint" class="hint">The heavy symmetric top, Goldstein &sect;5.7 &middot; drag the axis and let go &mdash; the release picks the pattern</span>
+        </div>
+        <a class="scroll-cue" href="#yuna" aria-label="Scroll to the Yuna demo">
+          <span>Scroll</span>
+          <svg viewBox="0 0 16 22" aria-hidden="true"><path d="M8 1v18M2.5 13.5 8 19.5l5.5-6" /></svg>
+        </a>
+      </section>
+
+      <section id="yuna">
+        <div class="band">
+          <p class="eyebrow">Product</p>
+          <h2>Meet Yuna</h2>
+          <div class="band-lead band-narrow">
+            <p>
+              Our first product, Yuna, automatically scores figure-skating performances,
+              explains the physics behind each result, and generates a physically
+              achievable target motion with actions to manifest it.
+            </p>
+          </div>
+
+          <figure class="demo">
+            <div class="demo-frame">
+              <video
+                id="demo-video"
+                src="/yuna/demo.mp4"
+                poster="/yuna/poster.jpg"
+                muted
+                playsinline
+                preload="metadata"
+                aria-label="Yuna scoring a figure-skating element"
+              ></video>
+              <button id="demo-toggle" class="demo-hit" type="button" aria-label="Play or pause the demo">
+                <span class="demo-glyph" aria-hidden="true"></span>
+              </button>
+              <button id="demo-sound" class="demo-chip" type="button">Unmute</button>
+              <div
+                id="demo-scrub"
+                class="demo-scrub"
+                role="slider"
+                tabindex="0"
+                aria-label="Seek"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              >
+                <div class="demo-bar"><i id="demo-bar-fill"></i></div>
+              </div>
+            </div>
+            <figcaption>
+              Yuna automatically detects and scores every element in a program, then gives
+              coaching feedback on each one. The world model generates possible futures, picks
+              the best one, and tells you how to get there.
+            </figcaption>
+          </figure>
+
+          <div class="band-lead band-after-figure">
+            <p>
+              Most datasets only contain simple motion demonstrations. Ours contains the verified
+              direction of improvement for the most complex biomechanics humanly possible.
+            </p>
+            <p>
+              If a world model can accurately predict and correct a skater landing on a
+              4&nbsp;mm blade with 5&nbsp;G&rsquo;s of force, then a robot recovering its
+              balance when it bumps into a kitchen counter is a trivial sub-problem.
+              Sports is merely our wedge into training a foundational model
+              for finely controllable motion generation across robotics, simulation, and
+              graphics.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="coach">
+        <div class="band">
+          <p class="eyebrow">Try Yuna</p>
+          <h2>An Interactable Motion Trail</h2>
+          <div class="band-lead">
+            <p>
+              Drag a box over the motion trail, or the raw physics signals, to zoom in on the
+              on ghost frames. Click on the GOE bullets to expand them and interpret exactly why 
+              the score was earned. Click "illustrate on trail" to see Yuna's broadcasting graphics.
+            </p>
+          </div>
+
+          <figure class="embed">
+            <div class="embed-frame" data-embed-frame>
+              <picture>
+                <!-- No room for the viewer here, so the still carries the section: the
+                     trail alone rather than the whole app shrunk past reading. -->
+                <source media="(max-width: 900px), (max-height: 520px)" srcset="/yuna/coach-trail.jpg" />
+                <img
+                  class="embed-still"
+                  src="/yuna/coach-poster.jpg"
+                  alt="Yuna's coach view: the triple flip drawn as a motion trail of nineteen echoes, beside the +GOE bullet list scoring it."
+                  loading="lazy"
+                  width="1578"
+                  height="1029"
+                />
+              </picture>
+              <iframe
+                class="embed-live"
+                data-embed
+                title="Yuna &mdash; coaching Alysa Liu's triple flip"
+                allow="autoplay"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <footer>
+        <div class="foot-inner">
+          <span class="foot-mark">Nutation Research</span>
+          <span class="foot-links">
+            <details class="contact" data-contact>
+              <summary>Contact</summary>
+              <div class="contact-panel">
+                <a class="contact-addr" href="mailto:shiva271@mit.edu">shiva271@mit.edu</a>
+                <p class="contact-note">
+                  <button type="button" class="contact-act" data-copy>copy</button>
+                  <span>or</span>
+                  <a class="contact-act" href="mailto:shiva271@mit.edu">click to email</a>
+                </p>
+              </div>
+            </details>
+            <a href="#yuna">Yuna</a>
+            <button id="replay" type="button">Replay the trace</button>
+          </span>
+        </div>
+      </footer>
+    </main>
+
   </body>
 </html>

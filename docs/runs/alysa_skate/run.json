@@ -1,0 +1,13 @@
+{
+  "mode": "generate_replay",
+  "output": { "dir": "." },
+  "pose_backend": { "kind": "mediapipe" },
+  "extractors": ["pose", "axis", "effort", "kinematics", "velocity", "rotation", "com_height", "com"],
+  "inputs": [
+    {
+      "video": "alysa_skate.mp4",
+      "element_id": "alysa_skate",
+      "element_override_parquet": "alysa_skate.elements.override.parquet"
+    }
+  ]
+}

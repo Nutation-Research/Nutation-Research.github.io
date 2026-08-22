@@ -1,0 +1,1357 @@
+/* Logo stays EB Garamond. Head/lead faces via html[data-display] and html[data-lead]. */
+
+:root {
+  --font-mark: 'EB Garamond', 'Iowan Old Style', Palatino, 'Palatino Linotype', serif;
+  --font-display: 'Source Serif 4', 'Iowan Old Style', Palatino, serif;
+  --font-lead: 'EB Garamond', 'Iowan Old Style', Palatino, serif;
+  --font-sans: 'Source Sans 3', ui-sans-serif, -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+  --font-serif: 'Source Serif 4', 'Iowan Old Style', Palatino, serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Menlo', 'Cascadia Code', monospace;
+  --display-weight: 400;
+  --display-transform: none;
+  --display-tracking: -0.018em;
+  /* Fluid so the headline's second line still fits beside the story plate at
+     laptop and tablet widths; 46px is the tuned size and holds from ~1440 up. */
+  --head-size: clamp(28px, 3.2vw, 46px);
+  --lead-size: 18px;
+  --lead-weight: 420;
+  --pill: #6d5558;
+  --pill-hover: #584346;
+
+  --paper: #eadcd8;
+  --card: #f2e6e2;
+  --soft: #f5ebe8;
+  --line: #e8d4cf;
+  --line-strong: #dbc4bd;
+  --ink: #1c1917;
+  --muted: #6d5558;
+  --faint: #a07874;
+  --rose: #b04a75;
+  --silver: #9898b0;
+
+  --header-h: 64px;
+  --band-w: 1180px;
+  --band-pad: clamp(20px, 6vw, 64px);
+  /* Where the story plate starts, and where the hero copy starts. The copy's
+     width is derived from both so the two can never run into each other. */
+  --plate-left: max(28rem, 40vw);
+  --hero-pad: clamp(20px, 7vw, 110px);
+}
+
+html[data-display="cormorant"] {
+  --font-display: 'Cormorant Garamond', 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="source"] {
+  --font-display: 'Source Serif 4', 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="fraunces"] {
+  --font-display: Fraunces, 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="instrument"] {
+  --font-display: 'Instrument Serif', 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="syne"] {
+  --font-display: Syne, ui-sans-serif, system-ui, sans-serif;
+  --display-transform: uppercase;
+  --display-tracking: 0.02em;
+}
+html[data-display="noto"] {
+  --font-display: 'Noto Serif Display', 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="baskerville"] {
+  --font-display: 'Libre Baskerville', 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="crimson"] {
+  --font-display: 'Crimson Pro', 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="lora"] {
+  --font-display: Lora, 'Iowan Old Style', Palatino, serif;
+}
+html[data-display="playfair"] {
+  --font-display: 'Playfair Display', 'Iowan Old Style', Palatino, serif;
+}
+
+html[data-lead="garamond"] {
+  --font-lead: 'EB Garamond', 'Iowan Old Style', Palatino, serif;
+}
+html[data-lead="epilogue"] {
+  --font-lead: Epilogue, ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="instrument-sans"] {
+  --font-lead: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="chivo"] {
+  --font-lead: Chivo, ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="jost"] {
+  --font-lead: Jost, ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="karla"] {
+  --font-lead: Karla, ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="outfit"] {
+  --font-lead: Outfit, ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="hanken"] {
+  --font-lead: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="cabin"] {
+  --font-lead: Cabin, ui-sans-serif, system-ui, sans-serif;
+}
+html[data-lead="chivo-mono"] {
+  --font-lead: 'Chivo Mono', ui-monospace, monospace;
+}
+
+html[data-pill="muted"] {
+  --pill: var(--muted);
+  --pill-hover: #584346;
+}
+html[data-pill="rose"] {
+  --pill: var(--rose);
+  --pill-hover: #8e3a5e;
+}
+html[data-pill="silver"] {
+  --pill: var(--silver);
+  --pill-hover: #7e7e96;
+}
+
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.62;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+}
+
+/* The intro owns the viewport. Scrolling unlocks only once the mark has docked
+   (or the boot failed), so the trace can never be scrolled out from under. */
+body {
+  height: 100svh;
+  overflow: hidden;
+}
+body.docked,
+body.boot-failed {
+  height: auto;
+  min-height: 100svh;
+  overflow: visible;
+}
+
+#skip-intro {
+  position: fixed;
+  right: 20px;
+  bottom: 18px;
+  z-index: 50;
+  display: none;
+  margin: 0;
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(242, 230, 226, 0.85);
+  color: var(--muted);
+  font: 550 12px/1 var(--font-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+body.intro-running:not(.boot-pending) #skip-intro { display: inline-block; }
+body.docked #skip-intro,
+body.boot-failed #skip-intro { display: none !important; }
+#skip-intro:hover { color: var(--ink); border-color: var(--ink); }
+
+::selection { background: rgba(176, 74, 117, 0.18); }
+
+/* paper grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.92 0 0 0 0 0.88 0 0 0 0 0.86 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- stage ---------- */
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+  opacity: 0;
+  touch-action: none;
+}
+body.docked #stage {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* ---------- intro fx layer ---------- */
+
+#fx {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+#fx-mark,
+#fx-mark-bold {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+}
+#fx-word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  font-family: var(--font-mark);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+  transform: translate(-50%, 0);
+  will-change: transform, opacity;
+}
+#fx-eq {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  max-width: min(94vw, 920px);
+  padding: 8px 14px;
+  /* Warmer than pure ink/black — matches the hero body copy. */
+  color: #3c3330;
+  text-align: center;
+  transform: translate(-50%, 0);
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+#fx-eq .katex-display { margin: 0; }
+#fx-eq .katex {
+  color: #3c3330;
+  font-size: clamp(0.96em, 2.35vw, 1.56em);
+  line-height: 1.35;
+}
+
+/* ---------- header ---------- */
+
+#site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 4vw, 48px);
+  opacity: 0;
+  pointer-events: none;
+}
+body.docked #site-header {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 400ms ease;
+}
+/* Once the deck scrolls under it, the bar needs its own ground. */
+body.past-hero #site-header {
+  background: rgba(234, 220, 216, 0.86);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+#site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+#site-header nav > a,
+#site-header nav summary {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 150ms ease;
+}
+#site-header nav > a:hover,
+#site-header nav summary:hover { color: var(--ink); }
+
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+.brand-lockup-mark {
+  height: 1.75rem;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+#header-mark { opacity: 0; }
+body.docked #header-mark { opacity: 1; }
+.wordmark {
+  margin: 0;
+  font-family: var(--font-mark);
+  font-optical-sizing: auto;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--ink);
+  display: inline-block;
+  transform: translateY(1px);
+}
+#header-lockup .wordmark {
+  opacity: 0;
+  transform: translateY(1px);
+}
+body.docked #header-lockup .wordmark {
+  opacity: 1;
+  transform: translateY(1px);
+}
+
+/* ---------- content ---------- */
+
+#content {
+  position: relative;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(14px);
+  /* let pointer events fall through to the canvas in the hero;
+     real content re-enables them below */
+  pointer-events: none;
+}
+.hero-copy,
+.hero-caption,
+.scroll-cue,
+#yuna,
+#coach,
+#research,
+footer {
+  pointer-events: auto;
+}
+body.docked #content,
+body.boot-failed #content {
+  opacity: 1;
+  transform: none;
+  transition: opacity 700ms ease 150ms, transform 700ms ease 150ms;
+}
+
+/* When WebGL can't boot, park the mark as a static hero visual. */
+body.boot-failed #hero::after {
+  content: '';
+  position: absolute;
+  right: clamp(24px, 8vw, 120px);
+  top: 50%;
+  width: min(42vw, 380px);
+  aspect-ratio: 824 / 836;
+  transform: translateY(-46%);
+  background: url('/nutation-mark.png') center / contain no-repeat;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+/* ---------- post-intro story (watercolor → futures → gray/pink) ---------- */
+
+#story-layer {
+  position: fixed;
+  top: 0;
+  left: var(--plate-left);
+  right: 0;
+  width: auto;
+  height: 100%;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  padding: var(--header-h) 40px 56px 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms ease;
+}
+body.story-playing #story-layer { opacity: 1; }
+/* The story is a hero element; scrolling into the deck retires it. */
+body.past-hero #story-layer {
+  opacity: 0 !important;
+  transition: opacity 320ms ease;
+}
+body.story-playing #stage {
+  opacity: 0 !important;
+  pointer-events: none;
+  transition: opacity 650ms ease;
+}
+#story-stage {
+  --story-w: 807px;
+  --story-h: 592px;
+  --story-zoom: 1;
+  --story-well: #eadcd8;
+  --story-shadow: none;
+  --story-edge-c: #9c2b2b;
+  --story-edge-w: 1.3px;
+  --plate-x: 0px;
+  --plate-y: 0px;
+  width: min(var(--story-w), 100%);
+  max-height: calc(100svh - 160px);
+  transform: translate(var(--plate-x), var(--plate-y));
+}
+.story-frame {
+  box-shadow: var(--story-shadow);
+}
+#story-stage[data-shadow="soft"] {
+  --story-shadow: 0 1px 2px rgba(28, 25, 23, 0.05), 0 12px 32px rgba(28, 25, 23, 0.1);
+}
+#story-stage[data-shadow="plate"] {
+  --story-shadow: 0 2px 4px rgba(28, 25, 23, 0.07), 0 22px 48px rgba(28, 25, 23, 0.18);
+}
+#story-stage[data-shadow="deep"] {
+  --story-shadow: 0 8px 18px rgba(28, 25, 23, 0.12), 0 28px 64px rgba(28, 25, 23, 0.22);
+}
+#story-stage[data-frame="window"] .story-frame {
+  border-radius: 16px;
+  overflow: hidden;
+}
+#story-stage[data-frame="viewer"] .story-frame {
+  border-radius: 2px;
+  overflow: hidden;
+}
+#story-stage[data-frame="viewer"] .story-dot { display: none; }
+#story-stage[data-frame="viewer"] .story-viewer-tag,
+#story-stage[data-frame="viewer"] .story-tc { display: inline; }
+#story-stage[data-frame="viewer"] .story-chrome {
+  height: 22px;
+  padding: 0 10px;
+  background: #121114;
+  justify-content: space-between;
+}
+#story-stage[data-frame="viewer"] #story-caption { margin-left: 0; flex: 1; text-align: center; }
+#story-stage[data-frame="viewer"] .story-well { --story-well: #0c0b0d; background: #0c0b0d; }
+#story-stage[data-frame="hud"] .story-chrome,
+#story-stage[data-frame="plate"] .story-chrome,
+#story-stage[data-frame="none"] .story-chrome { display: none; }
+#story-stage[data-hud="on"] .story-hud { display: block; }
+#story-stage[data-mark="off"] .hud-mark { display: none; }
+#story-stage[data-caption="on"] .story-plate-cap { display: flex; }
+.story-chrome {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  background: #17171b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.story-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.story-dot-r { background: #ff5f57; }
+.story-dot-y { background: #febc2e; }
+.story-dot-g { background: #28c840; }
+.story-viewer-tag,
+.story-tc { display: none; }
+.story-viewer-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: #c4a4b0;
+}
+.story-tc {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #8a8694;
+  font-variant-numeric: tabular-nums;
+}
+#story-caption {
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #8a8694;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.story-well {
+  position: relative;
+  width: 100%;
+  height: var(--story-h);
+  max-height: calc(100svh - 200px);
+  background: var(--story-well);
+  overflow: hidden;
+  outline: var(--story-edge-w) solid var(--story-edge-c);
+}
+.story-hud { display: none; }
+.hud-c {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: solid rgba(28, 25, 23, 0.55);
+  pointer-events: none;
+}
+.hud-tl { top: 10px; left: 10px; border-width: 1.5px 0 0 1.5px; }
+.hud-tr { top: 10px; right: 10px; border-width: 1.5px 1.5px 0 0; }
+.hud-bl { bottom: 10px; left: 10px; border-width: 0 0 1.5px 1.5px; }
+.hud-br { bottom: 10px; right: 10px; border-width: 0 1.5px 1.5px 0; }
+.hud-mark {
+  position: absolute;
+  top: 12px;
+  right: 34px;
+  width: 22px;
+  height: auto;
+  opacity: 0.82;
+  filter: drop-shadow(0 1px 2px rgba(28, 25, 23, 0.28));
+}
+.story-plate-cap {
+  --cap-x: 0px;
+  --cap-y: 12px;
+  display: none;
+  align-items: baseline;
+  margin-top: 0.55rem;
+  font-family: 'Source Serif 4', 'Iowan Old Style', Palatino, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12.5px;
+  color: var(--muted);
+  transform: translate(var(--cap-x), var(--cap-y));
+}
+body.story-playing .hero-caption { display: none; }
+#story-layer video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+  opacity: 0;
+  transform: scale(var(--story-zoom));
+  transform-origin: center center;
+  transition: opacity 560ms ease;
+}
+#story-layer video.is-on { opacity: 1; }
+#hero-lead mark,
+#regime-chip mark {
+  background: rgba(176, 74, 117, 0.22);
+  color: var(--ink);
+  font-style: italic;
+  padding: 0 0.22em;
+  border-radius: 3px;
+}
+#hero-lead mark.mark-gray,
+#regime-chip mark.mark-gray {
+  background: rgba(28, 25, 23, 0.14);
+  color: var(--ink);
+  font-style: normal;
+  font-weight: 550;
+}
+#hero-lead mark.mark-pink,
+#regime-chip mark.mark-pink {
+  background: rgba(176, 74, 117, 0.26);
+  color: #7a3352;
+  font-style: normal;
+  font-weight: 550;
+}
+
+body.boot-failed #regime-chip::before {
+  content: 'WebGL unavailable — static mark · ';
+}
+
+#hero {
+  min-height: 100svh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-top: var(--header-h);
+}
+.hero-copy {
+  --copy-x: 0px;
+  --copy-y: 0px;
+  /* 34rem is the reading measure. The calc is the hard stop that keeps the
+     headline from wrapping in under the story plate at laptop and tablet
+     widths; combined with fluid --head-size it does not change the wrap at
+     1440 and up, where the tuned layout already cleared the plate. */
+  max-width: min(34rem, calc(var(--plate-left) - var(--hero-pad)));
+  margin-left: var(--hero-pad);
+  transform: translate(var(--copy-x), var(--copy-y));
+}
+.hero-copy h1 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-size: var(--head-size);
+  line-height: 1.18;
+  letter-spacing: var(--display-tracking);
+  text-transform: var(--display-transform);
+  margin: 0 0 1.05rem;
+}
+.hero-copy p {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  font-size: 15.5px;
+  /* Body copy may rewrap freely, so it takes the hard stop that keeps the hero
+     clear of the story plate. The headline is kept intact by fluid sizing. */
+  max-width: min(28rem, calc(var(--plate-left) - var(--hero-pad) - 1.25rem));
+}
+#hero-lead {
+  font-family: var(--font-lead);
+  font-weight: var(--lead-weight);
+  font-style: normal;
+  font-size: var(--lead-size);
+  line-height: 1.42;
+  color: var(--muted);
+  max-width: min(32rem, calc(var(--plate-left) - var(--hero-pad) - 1.25rem));
+}
+.hero-links { display: flex; align-items: center; gap: 1.2rem; }
+.pill {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 550;
+  background: var(--pill);
+  color: #f9f5f0;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+.pill:hover { background: var(--pill-hover); }
+
+.hero-caption {
+  position: absolute;
+  right: clamp(20px, 4vw, 48px);
+  bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  text-align: right;
+}
+#regime-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink);
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 10px;
+  transition: opacity 300ms ease;
+}
+.hero-caption .hint {
+  font-size: 11.5px;
+  color: var(--faint);
+  max-width: 34rem;
+}
+
+/* ---------- footer ---------- */
+
+footer {
+  position: relative;
+  z-index: 12;
+  background: var(--paper);
+  padding: 0 0 34px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.foot-inner {
+  max-width: var(--band-w);
+  margin: 0 auto;
+  padding: 22px var(--band-pad) 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.foot-links { display: inline-flex; gap: 1.3rem; align-items: baseline; }
+footer a,
+footer summary { color: var(--muted); text-decoration: none; }
+footer a:hover,
+footer summary:hover { color: var(--ink); }
+#replay {
+  font: inherit;
+  color: var(--muted);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-bottom: 1px solid var(--line-strong);
+}
+#replay:hover { color: var(--ink); }
+
+/* ---------- contact ---------- */
+
+.contact {
+  position: relative;
+}
+.contact summary {
+  list-style: none;
+  cursor: pointer;
+  font: inherit;
+}
+.contact summary::-webkit-details-marker { display: none; }
+.contact[open] summary { color: var(--ink); }
+.contact-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 40;
+  min-width: 15.5rem;
+  padding: 12px 14px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: rgba(242, 230, 226, 0.96);
+  box-shadow: 0 8px 24px rgba(28, 25, 23, 0.12);
+  backdrop-filter: blur(8px);
+}
+footer .contact-panel {
+  top: auto;
+  bottom: calc(100% + 10px);
+}
+.contact-addr {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--ink) !important;
+  text-decoration: none;
+}
+.contact-note {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0.45rem 0 0;
+  font-size: 12px;
+  color: var(--faint);
+}
+.contact-act {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 1px solid var(--line-strong);
+}
+.contact-act:hover { color: var(--ink); }
+#site-header .contact-act,
+footer .contact-act {
+  font-size: 12px;
+  text-decoration: none;
+}
+
+/* ---------- scroll cue ---------- */
+
+.scroll-cue {
+  position: absolute;
+  left: clamp(20px, 7vw, 110px);
+  bottom: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--faint);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: opacity 400ms ease, color 180ms ease;
+}
+.scroll-cue svg {
+  width: 11px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: cue-drift 2.6s ease-in-out infinite;
+}
+@keyframes cue-drift {
+  0%, 100% { transform: translateY(-2px); opacity: 0.5; }
+  50% { transform: translateY(2px); opacity: 1; }
+}
+.scroll-cue:hover { color: var(--ink); }
+body.past-hero .scroll-cue { opacity: 0; pointer-events: none; }
+
+/* ---------- scroll deck: shared band ---------- */
+
+/* Opaque, so the fixed canvas and story plate cannot bleed through the deck. */
+#yuna,
+#coach,
+#research {
+  position: relative;
+  background: var(--paper);
+}
+#coach,
+#research { border-top: 1px solid var(--line); }
+
+.band {
+  max-width: var(--band-w);
+  margin: 0 auto;
+  padding: clamp(36px, 5vh, 64px) var(--band-pad);
+}
+/* The hero is already a full viewport. Extra band padding here reads as a
+   blank beat between the story plate and "Meet Yuna". */
+#yuna .band {
+  padding-top: clamp(20px, 2.8vh, 36px);
+}
+.eyebrow {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.band h2 {
+  margin: 0 0 1.5rem;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(30px, 4.2vw, 44px);
+  line-height: 1.14;
+  letter-spacing: var(--display-tracking);
+  text-transform: var(--display-transform);
+}
+/* Every block of body copy in the deck: one size, one colour, and the same
+   measure as the figures, so the page has a single left and right edge. Long
+   lines need the extra leading. */
+.band-lead {
+  margin-bottom: clamp(20px, 2.4vw, 30px);
+}
+/* Copy that reads better short than aligned. */
+.band-narrow { max-width: 44rem; }
+.band-lead p {
+  margin: 0 0 1.05rem;
+  font-family: var(--font-lead);
+  font-weight: var(--lead-weight);
+  font-size: clamp(16.5px, 1.5vw, 19px);
+  line-height: 1.58;
+  color: var(--ink);
+}
+.band-lead p:last-child { margin-bottom: 0; }
+/* A note that follows a figure needs the space above that the figure's own
+   caption does not provide. */
+.band-after-figure { margin-top: clamp(44px, 6vw, 74px); }
+
+/* ---------- the Yuna demo ---------- */
+
+.demo { margin: 0; }
+/* Both media blocks share one width, wider than the copy, and the 16/9 frame
+   takes its height from it. */
+@media (min-width: 1280px) {
+  .demo { margin-inline: calc(-1 * var(--band-pad)); }
+}
+.demo-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 2px 6px rgba(28, 25, 23, 0.08), 0 26px 58px rgba(28, 25, 23, 0.18);
+}
+.demo-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.demo-hit {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.demo-glyph {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: rgba(28, 25, 23, 0.5);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+.demo-glyph::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  transform: translate(-50%, -50%);
+  border-left: 16px solid #f9f5f0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+.demo-frame.is-paused .demo-glyph { opacity: 1; transform: scale(1); }
+.demo-frame.is-playing .demo-hit:hover .demo-glyph { opacity: 0.9; transform: scale(1); }
+.demo-frame.is-playing .demo-glyph::before {
+  left: 50%;
+  width: 5px;
+  height: 19px;
+  border: 0;
+  background: #f9f5f0;
+  box-shadow: -9px 0 0 #f9f5f0;
+  transform: translate(-1px, -50%);
+}
+.demo-chip {
+  position: absolute;
+  right: 14px;
+  /* Clear of the seek track, which owns the bottom strip. */
+  bottom: 28px;
+  z-index: 4;
+  padding: 6px 13px;
+  border: 1px solid rgba(249, 245, 240, 0.3);
+  border-radius: 999px;
+  background: rgba(28, 25, 23, 0.5);
+  color: #f9f5f0;
+  font: 550 10.5px/1 var(--font-sans);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 160ms ease;
+}
+.demo-chip:hover { background: rgba(28, 25, 23, 0.72); }
+/* A 3px line is impossible to grab, so the track carries an invisible
+   pointer target the full height of the strip. */
+.demo-scrub {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  height: 22px;
+  cursor: pointer;
+  touch-action: none;
+}
+.demo-bar {
+  width: 100%;
+  height: 3px;
+  /* Dark track: the recording is mostly pale UI, so a light one vanishes. */
+  background: rgba(28, 25, 23, 0.16);
+  transition: height 130ms ease;
+}
+.demo-scrub:hover .demo-bar,
+.demo-scrub:focus-visible .demo-bar,
+.demo-scrub.is-scrubbing .demo-bar { height: 6px; }
+.demo-scrub:focus-visible { outline: none; }
+.demo-bar i {
+  position: relative;
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--rose);
+}
+/* Handle: only worth showing once the reader is actually aiming at the bar. */
+.demo-bar i::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--rose);
+  transform: translate(50%, -50%) scale(0);
+  transition: transform 130ms ease;
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.35);
+}
+.demo-scrub:hover .demo-bar i::after,
+.demo-scrub:focus-visible .demo-bar i::after,
+.demo-scrub.is-scrubbing .demo-bar i::after { transform: translate(50%, -50%) scale(1); }
+.demo figcaption,
+.plate figcaption {
+  margin-top: 0.85rem;
+  max-width: 46rem;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.demo figcaption { font-style: italic; }
+.demo-alt {
+  margin-left: 0.6rem;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 12px;
+  color: var(--faint);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-strong);
+}
+.demo-alt:hover { color: var(--ink); }
+
+/* ---------- the live Yuna embed ---------- */
+
+/* This title belongs on one line; the 20ch default breaks it in two. */
+#coach h2 { max-width: none; }
+
+.embed { margin: 0; }
+/* Past the reading measure, out to the full band: the stage, the GOE list and
+   the telemetry lanes all spend width well. Only where there is width to give. */
+@media (min-width: 1280px) {
+  .embed { margin-inline: calc(-1 * var(--band-pad)); }
+}
+/* Height-driven, not an aspect ratio: the frame holds a layout, and the panes
+   inside it need a fixed vertical budget — the trail, the transport, the
+   telemetry lanes and a GOE list long enough to open a bullet in. */
+.embed-frame {
+  position: relative;
+  height: clamp(600px, calc(100svh - 130px), 800px);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 2px 6px rgba(28, 25, 23, 0.08), 0 26px 58px rgba(28, 25, 23, 0.18);
+}
+.embed-still,
+.embed-live {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.embed-still { object-fit: cover; }
+/* The frame carries a still until the viewer has actually painted, so the page
+   never shows a white rectangle where the app is about to be. */
+.embed-live {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 420ms ease;
+}
+.embed-frame.is-live .embed-live {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Where the viewer never loads (see canEmbed), the frame takes the shape of the
+   trail crop and the caption drops instructions nobody can follow. */
+@media (max-width: 900px), (max-height: 520px) {
+  .embed-frame {
+    height: auto;
+    aspect-ratio: 1100 / 512;
+  }
+  .embed-only { display: none; }
+}
+
+/* ---------- research ---------- */
+
+/* Research reads on the same measure as the product band: one column of lead
+   copy, with the figures full width between the blocks. */
+#research .plate + .plate { margin-top: clamp(18px, 2.4vw, 28px); }
+#research .plate + .band-lead { margin-top: clamp(30px, 4vw, 48px); }
+
+.brief {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.8rem, 3.4vw, 3rem);
+  margin: clamp(34px, 4.5vw, 52px) 0 0;
+  padding: clamp(28px, 3.4vw, 40px) 0 0;
+  border-top: 1px solid var(--line);
+}
+.brief-n {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+}
+.brief h3 {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: var(--display-tracking);
+}
+.brief p:not(.brief-n) {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.66;
+  color: var(--muted);
+}
+.brief p:not(.brief-n) + p { margin-top: 0.9rem; }
+
+.plate { margin: clamp(48px, 6vw, 76px) 0 0; }
+.plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.05), 0 14px 34px rgba(28, 25, 23, 0.1);
+}
+.tag {
+  display: inline-block;
+  margin-right: 0.45rem;
+  padding: 2px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--soft);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.claim {
+  margin: clamp(54px, 7vw, 88px) 0 0;
+  padding: clamp(26px, 3.2vw, 40px) clamp(24px, 3.2vw, 44px);
+  border-left: 2px solid var(--rose);
+  border-radius: 0 8px 8px 0;
+  background: var(--card);
+}
+.claim p {
+  margin: 0 0 0.9rem;
+  max-width: 52rem;
+  font-family: var(--font-lead);
+  font-weight: var(--lead-weight);
+  font-size: clamp(16px, 1.4vw, 18.5px);
+  line-height: 1.54;
+  color: var(--ink);
+}
+.claim p:last-child { margin-bottom: 0; }
+/* The middle paragraph is the supporting evidence; the outer two carry the point. */
+.claim p:nth-child(2) { color: var(--muted); }
+.claim em { font-style: italic; color: var(--rose); }
+
+/* Citations inside body copy: default link blue wrecks the palette. */
+.brief a,
+.claim a,
+.band-body a,
+.band-lead a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--rose);
+  transition: color 150ms ease;
+}
+.brief a:hover,
+.claim a:hover,
+.band-body a:hover,
+.band-lead a:hover { color: var(--rose); }
+
+.sub {
+  margin: clamp(58px, 7vw, 90px) 0 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(23px, 2.7vw, 30px);
+  letter-spacing: var(--display-tracking);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.4rem, 3vw, 2.6rem);
+  margin: clamp(50px, 6vw, 78px) 0 0;
+  padding-top: clamp(26px, 3vw, 36px);
+  border-top: 1px solid var(--line);
+}
+.stats dt {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(21px, 2.3vw, 29px);
+  line-height: 1.1;
+  letter-spacing: var(--display-tracking);
+  color: var(--rose);
+  /* Old-style figures turn "72:1" into "72:I" at this size. */
+  font-variant-numeric: lining-nums;
+}
+.stats dd {
+  margin: 0.5rem 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ---------- reveal on scroll ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 980px) {
+  .brief { grid-template-columns: 1fr; gap: 2rem; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  :root {
+    /* 46px of display type wraps to six lines on a phone and runs into the
+       story plate. One knob governs the band both sides have to respect. */
+    --head-size: 28px;
+    --lead-size: 16px;
+    /* Sized so the zoomed plate fills the frame with no letterbox above or
+       below the skater; see --story-zoom on #story-stage. */
+    --story-band: 46svh;
+  }
+
+  /* The intro is under a second on a phone, so the control would flash and go. */
+  #skip-intro { display: none !important; }
+
+  /* Copy hangs from under the header and the plate owns a reserved band at the
+     bottom, so on a short screen the two can never overlap. */
+  #hero {
+    align-items: flex-start;
+    padding-top: calc(var(--header-h) + 12px);
+    padding-bottom: calc(var(--story-band) + 8px);
+  }
+  .hero-copy {
+    margin-left: 20px;
+    margin-right: 20px;
+    max-width: none;
+  }
+  .hero-copy h1 { margin-bottom: 0.75rem; }
+  .hero-copy p { margin-bottom: 1rem; max-width: none; }
+  #hero-lead { max-width: none; }
+  .hero-caption { left: 20px; align-items: flex-start; text-align: left; }
+  .scroll-cue { display: none; }
+
+  /* Full-size lockup plus three nav items overruns a 360px header and the
+     wordmark lands on top of "Contact". Both sides give a little. The wordmark
+     stays laid out either way: the intro docks the flying copy onto its box. */
+  #site-header { padding: 0 16px; }
+  .brand-lockup { gap: 0.35rem; }
+  .brand-lockup-mark { height: 1.45rem; }
+  .wordmark { font-size: 15px; }
+  #site-header nav { gap: 0.8rem; }
+  #site-header nav > a,
+  #site-header nav summary { font-size: 12.5px; }
+  #site-header .contact-panel { min-width: 13.5rem; }
+
+  #story-layer {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    height: var(--story-band);
+    /* Nearly edge to edge: the plate is width-limited on a phone, so every
+       pixel of padding comes straight off the skater. */
+    padding: 4px 10px 10px;
+    /* Stretch, not centre: the plate has to fill the band so the flex chain
+       below can hand the well a definite height. */
+    place-items: stretch;
+  }
+  /* The well is a fixed 592px tall for desktop. Left alone on a phone it hangs
+     off the bottom of the screen and object-fit centres the skater out of view,
+     so here it is sized by the band instead. */
+  #story-stage {
+    height: 100%;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    --cap-y: 0px;
+    /* The skater sits in the middle of a frame with wide white margins, so
+       filling the screen is not enough on its own; the plate zooms past its
+       own edges and the well clips the surplus. */
+    --story-zoom: 1.28;
+  }
+  #story-stage .story-frame {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+  }
+  #story-stage .story-well {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+  }
+  .story-plate-cap { font-size: 11.5px; }
+
+  /* KaTeX display math cannot wrap, so the Lagrangian either fits on one line
+     or spills off both edges. Below ~380px it needs the smaller size. */
+  #fx-eq {
+    max-width: 98vw;
+    padding: 6px 6px;
+  }
+  #fx-eq .katex { font-size: 12px; }
+
+  .demo-frame { border-radius: 7px; }
+  .demo-chip { right: 10px; bottom: 24px; }
+  .stats { grid-template-columns: 1fr; }
+}
+
+/* Landscape phone: too wide for the stacked layout but far too short for the
+   desktop one, where 46px display type wraps into the story plate. */
+@media (min-width: 721px) and (max-height: 480px) {
+  :root {
+    --head-size: 26px;
+    --lead-size: 15px;
+    --plate-left: max(23rem, 46vw);
+  }
+  #hero {
+    align-items: center;
+    padding-top: calc(var(--header-h) + 4px);
+  }
+  .hero-copy p { margin-bottom: 0.9rem; }
+  #story-layer { padding: var(--header-h) 20px 18px 12px; }
+  .hero-caption { display: none; }
+  .scroll-cue { display: none; }
+}
+
+/* Short phones (SE-class) cannot fit the headline, the lead, the button and a
+   video plate at the sizes above. Type and the plate both give ground. */
+@media (max-width: 720px) and (max-height: 740px) {
+  :root {
+    --head-size: 24px;
+    --lead-size: 15px;
+    --story-band: 38svh;
+  }
+  /* A short screen cannot give the well enough height to stay narrower than the
+     clip, so here zoom would crop top and bottom and take the skater's head off.
+     Smaller but whole wins. */
+  #story-stage { --story-zoom: 1; }
+  #hero { padding-top: calc(var(--header-h) + 6px); }
+  .hero-copy h1 { margin-bottom: 0.6rem; }
+  .hero-copy p { margin-bottom: 0.85rem; }
+  .story-plate-cap { font-size: 10.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body.docked #content,
+  body.docked #site-header,
+  body.docked #header-lockup .wordmark { transition: none; }
+  .scroll-cue svg { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
