@@ -3,8 +3,8 @@ import { CONTACT_EMAIL, copyLabel, mailtoHref } from './contact';
 
 describe('contact', () => {
   it('points mailto at the public address', () => {
-    expect(CONTACT_EMAIL).toBe('shiva271@mit.edu');
-    expect(mailtoHref(CONTACT_EMAIL)).toBe('mailto:shiva271@mit.edu');
+    expect(CONTACT_EMAIL).toBe('contact@nutationresearch.com');
+    expect(mailtoHref(CONTACT_EMAIL)).toBe('mailto:contact@nutationresearch.com');
   });
 
   it('names the copy action, then confirms it', () => {

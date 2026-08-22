@@ -1258,6 +1258,18 @@ body.past-hero .scroll-cue { opacity: 0; pointer-events: none; }
   #site-header nav summary { font-size: 12.5px; }
   #site-header .contact-panel { min-width: 13.5rem; }
 
+  /* The footer's Contact sits mid-row rather than at the right edge, so the
+     desktop `right: 0` anchor swings the panel off the left of a phone screen
+     (and centring on the summary overflows too once the row wraps). Anchor it
+     to the footer row instead, so it spans that width and always fits. */
+  footer .foot-inner { position: relative; }
+  footer .contact { position: static; }
+  footer .contact-panel {
+    left: 0;
+    right: 0;
+    min-width: 0;
+  }
+
   #story-layer {
     left: 0;
     right: 0;

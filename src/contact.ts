@@ -1,4 +1,4 @@
-export const CONTACT_EMAIL = 'shiva271@mit.edu';
+export const CONTACT_EMAIL = 'contact@nutationresearch.com';
 
 export function mailtoHref(email: string): string {
   return `mailto:${email}`;
