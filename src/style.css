@@ -633,6 +633,12 @@ body.boot-failed #regime-chip::before {
   transition: background 150ms ease;
 }
 .pill:hover { background: var(--pill-hover); }
+.pill-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line-strong);
+}
+.pill-ghost:hover { background: var(--soft); color: var(--ink); }
 
 .hero-caption {
   position: absolute;
@@ -854,6 +860,75 @@ body.past-hero .scroll-cue { opacity: 0; pointer-events: none; }
 /* A note that follows a figure needs the space above that the figure's own
    caption does not provide. */
 .band-after-figure { margin-top: clamp(44px, 6vw, 74px); }
+
+/* ---------- beta-tester apply form ---------- */
+
+.beta-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem 1.4rem;
+  margin-top: clamp(20px, 2.4vw, 30px);
+}
+.beta-field { display: flex; flex-direction: column; gap: 0.4rem; }
+.beta-field:nth-child(3),
+.beta-field:nth-child(4) { grid-column: 1 / -1; }
+.beta-field label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.beta-field input,
+.beta-field textarea {
+  font: inherit;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  resize: vertical;
+}
+.beta-field input:focus,
+.beta-field textarea:focus {
+  outline: none;
+  border-color: var(--rose);
+  box-shadow: 0 0 0 3px rgba(176, 74, 117, 0.14);
+}
+.beta-hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.beta-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.3rem;
+}
+.beta-actions .pill {
+  border: none;
+  cursor: pointer;
+}
+.beta-actions .pill:disabled { opacity: 0.6; cursor: default; }
+.beta-status {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.beta-status[data-state="ok"] { color: #3e7a4f; }
+.beta-status[data-state="error"] { color: #b3382e; }
+
+@media (max-width: 720px) {
+  .beta-form { grid-template-columns: 1fr; }
+  .beta-field:nth-child(3),
+  .beta-field:nth-child(4) { grid-column: auto; }
+}
 
 /* ---------- the Yuna demo ---------- */
 

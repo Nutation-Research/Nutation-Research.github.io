@@ -52,8 +52,8 @@
       body.boot-failed #header-mark { opacity: 1 !important; }
       body.boot-failed #header-lockup .wordmark { opacity: 1 !important; transform: translateY(1px) !important; }
     </style>
-    <script type="module" crossorigin src="/assets/index-DDwrCbLk.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Dh4_k8kN.css">
+    <script type="module" crossorigin src="/assets/index-BouVlV1d.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-EHMpPqcb.css">
   </head>
   <body class="boot-pending intro-running">
     <div id="boot-hint" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none;font-family:EB Garamond,Georgia,serif;font-size:18px;letter-spacing:-0.01em;color:#6d5558;">
@@ -143,6 +143,7 @@
           </p>
           <p class="hero-links">
             <a class="pill" href="#yuna">Meet Yuna</a>
+            <a class="pill pill-ghost" href="#beta">Apply to be our beta tester</a>
           </p>
         </div>
         <div class="hero-caption">
@@ -255,6 +256,45 @@
               ></iframe>
             </div>
           </figure>
+        </div>
+      </section>
+
+      <section id="beta">
+        <div class="band band-narrow">
+          <p class="eyebrow">Beta</p>
+          <h2>Apply to be a beta tester</h2>
+          <div class="band-lead">
+            <p>
+              We're opening up early access to skaters, coaches, and judges who want to try
+              Yuna before anyone else. Tell us a bit about yourself and we'll reach out.
+            </p>
+          </div>
+
+          <form id="beta-form" class="beta-form" novalidate>
+            <div class="beta-field">
+              <label for="beta-name">Name</label>
+              <input id="beta-name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="beta-field">
+              <label for="beta-email">Email</label>
+              <input id="beta-email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="beta-field">
+              <label for="beta-role">Skater, coach, or judge?</label>
+              <input id="beta-role" name="role" type="text" placeholder="e.g. coach, senior level" />
+            </div>
+            <div class="beta-field">
+              <label for="beta-note">Anything else we should know?</label>
+              <textarea id="beta-note" name="note" rows="4"></textarea>
+            </div>
+            <!-- Honeypot: real visitors never fill this in; Formspree drops the submission if it's non-empty. -->
+            <input type="text" name="_gotcha" class="beta-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+            <div class="beta-actions">
+              <button type="submit" class="pill" id="beta-submit">Apply</button>
+              <span id="beta-status" class="beta-status" role="status" aria-live="polite"></span>
+            </div>
+          </form>
         </div>
       </section>
 

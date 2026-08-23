@@ -8,6 +8,7 @@ import { revealSite } from './boot';
 import { createStory } from './story';
 import { mountDeck } from './deck';
 import { mountContact } from './contact';
+import { mountBetaForm } from './beta';
 import { canEmbed, mountEmbed } from './embed';
 import { coachEmbedHref } from './sites';
 import { markIntroSeen, shouldSkipIntro, shouldSkipTrace } from './introSkip';
@@ -161,6 +162,7 @@ function boot(): void {
   document.getElementById('boot-hint')?.remove();
 
   mountContact(document.querySelectorAll<HTMLDetailsElement>('[data-contact]'));
+  mountBetaForm(document.getElementById('beta-form') as HTMLFormElement | null);
 
   mountDeck({
     video: document.getElementById('demo-video') as HTMLVideoElement | null,
