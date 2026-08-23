@@ -296,7 +296,19 @@ body.past-hero #site-header {
   align-items: center;
   gap: 0.45rem;
   white-space: nowrap;
+  /* #header-lockup is a <button> (click scrolls to top); reset its browser chrome
+     so it reads exactly like the plain lockup it replaced. */
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 150ms ease;
 }
+.brand-lockup:hover { opacity: 0.72; }
 .brand-lockup-mark {
   height: 1.75rem;
   width: auto;

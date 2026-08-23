@@ -163,6 +163,9 @@ function boot(): void {
 
   mountContact(document.querySelectorAll<HTMLDetailsElement>('[data-contact]'));
   mountBetaForm(document.getElementById('beta-form') as HTMLFormElement | null);
+  document.getElementById('header-lockup')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   mountDeck({
     video: document.getElementById('demo-video') as HTMLVideoElement | null,
